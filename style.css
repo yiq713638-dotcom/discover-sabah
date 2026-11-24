@@ -1,0 +1,1064 @@
+/* Discover Sabah｜ICT2215 Assignment 2 中文功能标注版
+   注释不会显示在网页中。先看各选择器上方的中文，再修改对应属性。
+   常用修改：颜色看 :root；首页看 .hero；景点看 .destination-grid；手机看 @media。
+   .名称选 class，#名称选 id；px 为像素，rem 相对根字号，vw 相对视口宽度。 */
+
+/* 【统一配色与字体】全站共享变量；修改颜色值可让引用它的样式一起更新。SVG 图标描边需在各自 SVG 文件中修改。 */
+:root {
+  --ocean: #126782; /* 海蓝色：链接、标签与按钮 */
+  --forest: #3e8267; /* 森林绿：标题强调文字 */
+  --sand: #f5e9d3; /* 沙色：联系区背景和首页按钮 */
+  --paper: #fbfaf6; /* 暖白色：页面与卡片背景 */
+  --white: #ffffff; /* 白色备用变量，当前规则也有直接使用 white 的写法 */
+  --ink: #173d3d; /* 深绿色：正文与页脚背景 */
+  --muted: #526662; /* 次要文字颜色 */
+  --line: #d9dfd7; /* 细分隔线颜色 */
+  --heading-font: Georgia, 'Times New Roman', serif; /* 标题字体；前一种不可用时依次使用后面的字体 */
+  --body-font: Arial, Helvetica, sans-serif; /* 正文和导航字体；使用本机常见字体 */
+}
+
+/* 所有元素采用 border-box：宽高包含内边距和边框，便于控制布局。 */
+* {
+  box-sizing: border-box;
+}
+
+/* 平滑页内跳转，并为顶部导航预留空间，避免目标标题被遮挡。 */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 104px;
+}
+
+/* 全站默认文字颜色、背景、字体、字号和行高；margin: 0 去掉浏览器默认外边距。 */
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--body-font);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+/* 媒体以块级显示，最大宽度不超过容器，避免撑出屏幕。 */
+img, video {
+  display: block;
+  max-width: 100%;
+}
+
+/* 链接继承所在区域的文字颜色，并让下划线稍微远离文字。 */
+a {
+  color: inherit;
+  text-underline-offset: 5px;
+}
+
+/* 表单控件继承网页字体，保持视觉统一。 */
+button, input, select, textarea {
+  font: inherit;
+}
+
+/* 去掉触屏点击时的默认高亮底色。 */
+button, a, input, select, textarea, summary {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 键盘导航时显示明显的焦点边框，便于判断当前选择的元素。 */
+:focus-visible {
+  outline: 3px solid #b75b1d;
+  outline-offset: 5px;
+}
+
+/* 去掉这些元素默认的顶部外边距，由具体布局统一安排间距。 */
+h1, h2, h3, p, figure {
+  margin-top: 0;
+}
+
+/* 统一标题行高，使多行标题更紧凑。 */
+h1, h2, h3 {
+  line-height: 1.1;
+}
+
+/* 一、二级标题使用 Georgia 衬线字体和稍紧的字距。 */
+h1, h2 {
+  font-family: var(--heading-font);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+}
+
+/* 【修改区域标题字号】clamp 让字号随屏幕变化，并限制最小值与最大值。 */
+h2 {
+  font-size: clamp(2.3rem, 4vw, 3.5rem);
+  margin-bottom: 0;
+}
+
+/* 区域标题中的强调文字使用森林绿。 */
+h2 em {
+  color: var(--forest);
+  font-weight: 400;
+}
+
+/* 三级标题采用常规字重。 */
+h3 {
+  font-weight: 400;
+}
+
+/* 共用内容容器：桌面最大宽度 1180px，两侧留白并水平居中。 */
+.container {
+  width: min(1180px, calc(100% - 96px));
+  margin-inline: auto;
+}
+
+/* 【修改区域上下间距】给主要区域设置上下内边距。 */
+.section {
+  padding: 100px 0;
+}
+
+/* 区域上方小标签的颜色、字号、字重和字距。 */
+.eyebrow {
+  color: var(--ocean);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  margin-bottom: 22px;
+}
+
+/* 共用按钮外观：排列文字与箭头，设置高度、留白、圆角和字体。 */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  min-height: 54px;
+  padding: 15px 25px;
+  text-decoration: none;
+  border: 0;
+  border-radius: 3px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* 按钮内部箭头的字号。 */
+.button span {
+  font-size: 1.2rem;
+}
+
+/* 【修改首页按钮颜色】沙色背景搭配深色文字。 */
+.button-sand {
+  background: var(--sand);
+  color: var(--ink);
+}
+
+/* 鼠标悬停首页按钮时，背景变成白色。 */
+.button-sand:hover {
+  background: white;
+}
+
+/* 【修改联系按钮颜色】海蓝背景搭配白色文字。 */
+.button-ocean {
+  background: var(--ocean);
+  color: white;
+}
+
+/* 文字链接的排列样式，文字和箭头之间留出间隔。 */
+.text-link {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.83rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* 鼠标悬停文字链接时显示下划线。 */
+.text-link:hover {
+  text-decoration: underline;
+}
+
+/* 放大文字链接内的装饰箭头。 */
+.text-link span[aria-hidden] {
+  font-size: 1.2rem;
+}
+
+/* 将跳到正文链接放在屏幕上方，默认不显示。 */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 16px;
+  background: white;
+  padding: 10px 20px;
+  z-index: 20;
+}
+
+/* 键盘聚焦时把跳到正文链接移到可见位置。 */
+.skip-link:focus {
+  top: 12px;
+}
+
+/* 视觉隐藏但保留屏幕阅读器可读内容，用于补充新标签页等提示。 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 吸顶导航栏：top: 0 固定在滚动容器顶部，z-index 控制覆盖层级。 */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+/* 桌面品牌与导航左右排列；手机规则会改为上下排列。 */
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 86px;
+  gap: 30px;
+}
+
+/* 品牌文字和山峰图标并排显示，设置品牌字体与间隔。 */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--heading-font);
+  font-size: 1.45rem;
+  letter-spacing: -0.06em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* 品牌中 sabah 字样加粗。 */
+.brand strong {
+  font-weight: 700;
+}
+
+/* 主导航横向排列，gap 控制导航项间隔。 */
+nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+/* 导航项字号、内边距与默认无下划线外观。 */
+nav a {
+  display: inline-block;
+  padding: 12px 0;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+/* 导航项悬停时改为海蓝并显示下划线。 */
+nav a:hover {
+  color: var(--ocean);
+  text-decoration: underline;
+}
+
+/* 最后一个导航项左侧显示分隔线。 */
+nav a:last-child {
+  border-left: 1px solid var(--line);
+  padding-left: 30px;
+}
+
+/* 联系导航项中文字与箭头的间距。 */
+nav a span {
+  margin-left: 14px;
+}
+
+/* 首页主视觉容器：设置最小高度、垂直居中与独立层叠环境。 */
+.hero {
+  position: relative;
+  min-height: 640px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: white;
+  background: var(--ink);
+  isolation: isolate;
+}
+
+/* 首页照片与遮罩铺满整个主视觉，并放在文字下方。 */
+.hero-image, .hero-shade {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+/* 照片等比例填满区域；object-position 调整裁切中心。 */
+.hero-image {
+  object-fit: cover;
+  object-position: center 48%;
+}
+
+/* 【修改首页遮罩】两层渐变叠加，让左侧标题和底部说明清晰可读；rgba 最后一个数控制不透明度。 */
+.hero-shade {
+  background: linear-gradient(90deg, rgba(5,34,38,.78) 0%, rgba(5,34,38,.38) 54%, rgba(5,34,38,.06) 100%), linear-gradient(0deg, rgba(5,34,38,.5), transparent 30%);
+}
+
+/* 【调整首页文字位置】通过上下内边距给标题和按钮留出空间。 */
+.hero-content {
+  padding-top: 65px;
+  padding-bottom: 115px;
+}
+
+/* 浅色小标签及其短横线并排排列。 */
+.light {
+  color: var(--sand);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 小标签旁的装饰短横线，颜色继承当前文字颜色。 */
+.small-line {
+  width: 25px;
+  height: 1px;
+  background: currentColor;
+}
+
+/* 【修改首页主标题字号】clamp 控制响应式字号，max-width 限制标题宽度。 */
+h1 {
+  font-size: clamp(3.5rem, 6.2vw, 5.4rem);
+  margin-bottom: 26px;
+  max-width: 800px;
+}
+
+/* 首页主标题中 Sabah 的强调颜色和字重。 */
+h1 em {
+  color: var(--sand);
+  font-weight: 400;
+}
+
+/* 首页简介的字号、行高及下方按钮间距。 */
+.hero-description {
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 30px;
+}
+
+/* 将地点说明与向下浏览链接放在首页底部，桌面左右排列。 */
+.hero-bottom {
+  position: absolute;
+  bottom: 28px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  font-size: 0.72rem;
+}
+
+/* 地点说明与装饰圆点并排，清除段落默认外边距。 */
+.hero-bottom p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 首页底部链接不显示下划线。 */
+.hero-bottom a {
+  text-decoration: none;
+}
+
+/* 向下箭头与文字的距离和字号。 */
+.hero-bottom a span {
+  margin-left: 25px;
+  font-size: 1.2rem;
+}
+
+/* 地点旁的沙色圆点，border-radius: 50% 生成圆形。 */
+.location-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sand);
+}
+
+/* 区域标题与导语横向分布，并在底部对齐。 */
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 60px;
+}
+
+/* 关于区域改为顶部对齐，便于两侧内容从相同高度开始。 */
+.about-heading {
+  align-items: start;
+}
+
+/* 关于区域两栏均分可用空间；min-width: 0 允许内容收缩。 */
+.about-heading > div {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 关于正文的顶部间距、颜色和字号。 */
+.about-copy {
+  padding-top: 30px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+/* 去掉关于区域最后一段的底部外边距。 */
+.about-copy p:last-child {
+  margin-bottom: 0;
+}
+
+/* 三种体验的三列网格，上方细线分隔标题和体验列表。 */
+.experience-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 36px;
+  margin-top: 48px;
+  padding-top: 36px;
+  border-top: 1px solid var(--line);
+}
+
+/* 每组体验的图标与说明并排排列。 */
+.experience {
+  display: flex;
+  align-items: start;
+  gap: 20px;
+}
+
+/* 图标占用固定 44px 宽度，不随文字挤压。 */
+.experience img {
+  flex: 0 0 44px;
+}
+
+/* 体验小标题采用 Georgia，并设置字号和下方间距。 */
+.experience h3 {
+  font-family: var(--heading-font);
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+/* 体验描述使用较小字号与次要文字颜色。 */
+.experience p {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-bottom: 0;
+}
+
+/* 【修改景点区域背景】使用浅灰绿色区分上下区域。 */
+.destinations {
+  background: #eef1e9;
+}
+
+/* 景点标题与卡片网格之间的距离。 */
+.destination-heading {
+  margin-bottom: 42px;
+}
+
+/* 景点区域右侧导语的字号、颜色与底部间距。 */
+.destination-heading > p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+/* 【修改景点列数】桌面三列等宽，minmax(0, 1fr) 避免内容撑宽；gap 是卡片间距。 */
+.destination-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+/* 卡片为浅色背景，内部采用纵向 Flex 布局。 */
+.destination-card {
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 作为图片类别标签绝对定位的参照容器。 */
+.card-image {
+  position: relative;
+}
+
+/* 【修改卡片图片高度】固定高度并等比例裁切，避免图片拉伸。 */
+.card-image img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+/* 将景点类别标签放在照片左上角，并设置背景、字号与留白。 */
+.image-tag {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  padding: 6px 10px;
+  background: var(--paper);
+  font-size: 0.59rem;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+}
+
+/* 卡片文字内边距及纵向排版；flex: 1 填满卡片剩余高度。 */
+.card-body {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* 景点编号与地区名称的小字样式。 */
+.card-number {
+  color: var(--ocean);
+  font-size: 0.61rem;
+  letter-spacing: 0.13em;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* 【修改景点名称字号】Georgia 字体及标题下方留白。 */
+.card-body h3 {
+  font-family: var(--heading-font);
+  font-size: 1.65rem;
+  letter-spacing: -0.03em;
+  margin-bottom: 14px;
+}
+
+/* 卡片正文样式；not 排除编号，避免覆盖它的独立样式。 */
+.card-body > p:not(.card-number) {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+/* margin-top: auto 将资料链接推向卡片底部，并加上分隔线。 */
+.card-body .text-link {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+/* 视频介绍和播放器分为宽度约 1:2 的两列，垂直居中。 */
+.film-layout {
+  display: grid;
+  grid-template-columns: 0.75fr 1.5fr;
+  gap: 70px;
+  align-items: center;
+  padding-top: 90px;
+}
+
+/* 视频标题与说明文字之间的间距。 */
+.film-copy h2 {
+  margin-bottom: 24px;
+}
+
+/* 视频正文样式，小标签保留自己的字号和颜色。 */
+.film-copy > p:not(.eyebrow) {
+  color: var(--muted);
+  font-size: 0.87rem;
+}
+
+/* 时长与短片类型的小字样式；important 覆盖上面正文规则的字号。 */
+.film-copy .film-meta {
+  margin-top: 30px;
+  font-size: 0.59rem !important;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+/* 时长与短片类型之间分隔符的水平间距。 */
+.film-meta span {
+  margin-inline: 8px;
+}
+
+/* 去掉 figure 默认外边距，允许视频容器收缩。 */
+.film {
+  margin: 0;
+  min-width: 0;
+}
+
+/* 播放器占满容器宽度，保持 16:9 比例，未加载时显示深色背景。 */
+video {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  background: #102d2e;
+}
+
+/* 视频下方说明文字的颜色、字号、间距和行高。 */
+figcaption {
+  color: var(--muted);
+  font-size: 0.7rem;
+  padding-top: 12px;
+  line-height: 1.5;
+}
+
+/* 【修改联系区域背景】使用沙色背景。 */
+.contact {
+  background: var(--sand);
+}
+
+/* 联系区域两列等宽，左侧文案和右侧表单顶部对齐。 */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 90px;
+  align-items: start;
+}
+
+/* 联系标题下方的间距。 */
+.contact-copy h2 {
+  margin-bottom: 28px;
+}
+
+/* 联系介绍文字颜色、字号和最大宽度。 */
+.contact-copy > p:not(.eyebrow) {
+  color: var(--muted);
+  font-size: 0.92rem;
+  max-width: 390px;
+}
+
+/* 负责任旅游提示的图标与文字布局，以及上方分隔线。 */
+.contact-note {
+  display: flex;
+  gap: 18px;
+  border-top: 1px solid #d4cbb8;
+  margin-top: 36px;
+  padding-top: 26px;
+  margin-bottom: 22px;
+}
+
+/* 指南针图标固定占用 36px 宽度。 */
+.contact-note img {
+  flex: 0 0 36px;
+}
+
+/* 旅游提示使用紧凑小字和较宽松的行距。 */
+.contact-note p {
+  font-size: 0.76rem;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+/* 提示中的重点文字使用较深颜色。 */
+.contact-note strong {
+  color: var(--ink);
+}
+
+/* 【修改表单外观】浅色面板、内边距与轻微圆角。 */
+.contact-form {
+  background: var(--paper);
+  padding: 36px;
+  border-radius: 4px;
+}
+
+/* 表单标题字体、字号和间距。 */
+.contact-form h3 {
+  font-family: var(--heading-font);
+  font-size: 1.7rem;
+  margin-bottom: 12px;
+}
+
+/* 表单演示说明的小字样式；# 表示按唯一 id 选取元素。 */
+#form-note {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+
+/* 桌面姓名和邮箱并排两列。 */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* 允许字段所在列收缩，防止输入框撑出布局。 */
+.form-row > div {
+  min-width: 0;
+}
+
+/* 标签单独占一行，设置小号粗体及与输入框的距离。 */
+label {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 700;
+  margin-bottom: 7px;
+}
+
+/* 所有表单输入控件共用的尺寸、边框、背景、字体和内外边距。 */
+input, select, textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid #bdc9c1;
+  border-radius: 2px;
+  background: white;
+  color: var(--ink);
+  margin-bottom: 18px;
+  font-size: 0.8rem;
+}
+
+/* 单行输入框与下拉菜单的最小高度。 */
+input, select {
+  min-height: 46px;
+}
+
+/* 允许留言框只沿竖直方向拖动调整大小。 */
+textarea {
+  resize: vertical;
+}
+
+/* 输入前提示文字的颜色，确保提示可辨认。 */
+input::placeholder, textarea::placeholder {
+  color: #65716d;
+  opacity: 1;
+}
+
+/* 联系按钮宽度占满表单容器。 */
+.contact-form .button {
+  width: 100%;
+}
+
+/* 禁用按钮保持清晰外观，鼠标显示不可操作状态。 */
+.contact-form button:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+/* 页脚使用深色背景和白色文字，上下留白。 */
+.site-footer {
+  background: var(--ink);
+  color: white;
+  padding: 42px 0 30px;
+}
+
+/* 页脚品牌、标语和返回顶部链接横向分布。 */
+.footer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 30px;
+}
+
+/* 页脚标语采用浅色、衬线斜体。 */
+.footer-top p {
+  margin: 0;
+  color: #d2ded8;
+  font-family: var(--heading-font);
+  font-style: italic;
+}
+
+/* 返回顶部链接的小字号和无下划线样式。 */
+.footer-top > a:last-child {
+  font-size: 0.75rem;
+  text-decoration: none;
+}
+
+/* 页脚下部的分隔线、课程说明和署名文字样式。 */
+.footer-bottom {
+  border-top: 1px solid #52716d;
+  padding-top: 23px;
+  font-size: 0.67rem;
+  color: #d2ded8;
+}
+
+/* 课程说明与折叠面板之间的距离。 */
+.footer-bottom > p {
+  margin-bottom: 12px;
+}
+
+/* 素材署名标题显示手形指针，方便识别为可点击内容。 */
+.credits summary {
+  cursor: pointer;
+  padding: 6px 0;
+  width: fit-content;
+}
+
+/* 展开后的署名区域设置顶部间距和最大宽度。 */
+.credits > div {
+  padding-top: 15px;
+  max-width: 900px;
+}
+
+/* 每条图片署名之间的间距。 */
+.credits p {
+  margin-bottom: 8px;
+}
+
+/* 屏幕宽度不超过 1000px 时启用：减小间距并调整表单排列。 */
+@media (max-width: 1000px) {
+  /* 【当前媒体条件下覆盖】调整 .container；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .container {
+    width: calc(100% - 56px);
+  }
+
+  /* 【当前媒体条件下覆盖】调整 nav；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  nav {
+    gap: 22px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .section；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .section {
+    padding: 75px 0;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .section-heading；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .section-heading {
+    gap: 35px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .experience-grid；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .experience-grid {
+    gap: 22px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .experience；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .experience {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .destination-grid；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .destination-grid {
+    gap: 16px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .card-image img；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .card-image img {
+    height: 210px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .card-body；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .card-body {
+    padding: 20px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .film-layout；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .film-layout {
+    gap: 36px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .contact-grid；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .contact-grid {
+    gap: 40px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .contact-form；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .contact-form {
+    padding: 28px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .form-row；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+}
+
+/* 屏幕宽度不超过 700px 时启用：导航上下排列，卡片和联系区域改为单列。 */
+@media (max-width: 700px) {
+  /* 【当前媒体条件下覆盖】调整 html；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  html {
+    scroll-padding-top: 125px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .container；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .container {
+    width: calc(100% - 40px);
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .header-inner；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .header-inner {
+    flex-direction: column;
+    gap: 0;
+    padding-top: 12px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .brand；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .brand {
+    font-size: 1.3rem;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .brand img；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .brand img {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 nav；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  nav {
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 nav a；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  nav a {
+    font-size: 0.72rem;
+    padding: 13px 0;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 nav a:last-child；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  nav a:last-child {
+    border: 0;
+    padding-left: 0;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 nav a span；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  nav a span {
+    margin-left: 4px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .hero；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .hero {
+    min-height: 640px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .hero-content；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .hero-content {
+    padding-top: 55px;
+    padding-bottom: 125px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 h1；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  h1 {
+    font-size: clamp(2.8rem, 11.5vw, 4.2rem);
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .hero-image；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .hero-image {
+    object-position: 59% center;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .hero-shade；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .hero-shade {
+    background: linear-gradient(90deg, rgba(5,34,38,.79), rgba(5,34,38,.2)), linear-gradient(0deg, rgba(5,34,38,.55), transparent 35%);
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .hero-bottom；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .hero-bottom {
+    flex-direction: column;
+    align-items: start;
+    gap: 9px;
+    bottom: 23px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .hero-bottom a span；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .hero-bottom a span {
+    margin-left: 15px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .section；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .section {
+    padding: 62px 0;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .section-heading；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .section-heading {
+    display: block;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .about-copy；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .about-copy {
+    padding-top: 26px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .experience-grid；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .experience-grid {
+    grid-template-columns: 1fr;
+    margin-top: 32px;
+    gap: 26px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .experience；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .experience {
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .destination-heading > p；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .destination-heading > p {
+    margin-top: 24px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .destination-grid, .film-layout, .contact-grid；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .destination-grid, .film-layout, .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .destination-grid；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .destination-grid {
+    gap: 30px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .card-image img；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .card-image img {
+    height: auto;
+    aspect-ratio: 4/3;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .card-body；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .card-body {
+    padding: 26px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .film-layout；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .film-layout {
+    padding-top: 60px;
+    gap: 24px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .film-copy .film-meta；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .film-copy .film-meta {
+    margin-top: 18px;
+    margin-bottom: 0;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .contact-grid；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .contact-grid {
+    gap: 32px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .contact-form；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .contact-form {
+    padding: 25px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .footer-top；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .footer-top {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  /* 【当前媒体条件下覆盖】调整 .footer-top p；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  .footer-top p {
+    order: 3;
+    width: 100%;
+    font-size: 0.85rem;
+  }
+
+}
+
+/* 用户偏好减少动画时启用：取消平滑滚动。 */
+@media (prefers-reduced-motion: reduce) {
+  /* 【当前媒体条件下覆盖】调整 html；以下属性覆盖前面的同名样式，未写出的属性继续沿用基础设置。 */
+  html {
+    scroll-behavior: auto;
+  }
+
+}
+
